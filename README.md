@@ -1,1 +1,1 @@
-# vercel-dapp
+# solana-vercel
