@@ -1,12 +1,38 @@
+import { BN, Program, Provider, utils } from '@project-serum/anchor';
+import { Connection, PublicKey, SYSVAR_CLOCK_PUBKEY, SystemProgram, clusterApiUrl } from '@solana/web3.js'
+import { ConnectionProvider, WalletProvider, useWallet  } from '@solana/wallet-adapter-react'
 import { WalletDisconnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import * as anchor from '@project-serum/anchor';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useEffect, useState } from 'react'
+
+import idl from '../../target/idl/protocol.json';
+import { Protocol } from '../../target/types/protocol';
 
 import styles from '../styles/Home.module.css';
 
+const opts = { preflightCommitment: 'processed' };
+const network = 'http://127.0.0.1:8899';
+
 const Index: NextPage = () => {
+    const wallet = useWallet();
+
+    async function getProgram() {
+        const connection = new Connection(network, opts.preflightCommitment)
+        const provider = new Provider(connection, wallet, opts.preflightCommitment)
+        const programId: PublicKey = new PublicKey('Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS');
+        const program = new Program(idl, programId, provider);
+        const result = await program.rpc.initialize();
+        console.log(result);
+    }
+
+    useEffect(() => {
+        if (wallet.connected) {
+            console.log('Connected!');
+        }
+    });
+
     return (
         <div className={styles.container}>
             <Head>
@@ -17,7 +43,7 @@ const Index: NextPage = () => {
 
             <main className={styles.main}>
                 <h1 className={styles.title}>
-                    Welcome to <a href="https://nextjs.org">Next.js!</a>
+                    Welcome to <a href="#" onClick={() => getProgram()}>Next.js!</a>
                 </h1>
 
                 <div className={styles.walletButtons}>

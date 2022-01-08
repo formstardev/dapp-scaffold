@@ -8,23 +8,23 @@ require('../styles/globals.css');
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const WalletConnectionProvider = dynamic<{ children: ReactNode }>(
-    () =>
-        import('../components/WalletConnectionProvider').then(
-            ({ WalletConnectionProvider }) => WalletConnectionProvider
-        ),
-    {
-        ssr: false,
-    }
+  () =>
+  import('../components/WalletConnectionProvider').then(
+    ({ WalletConnectionProvider }) => WalletConnectionProvider
+  ),
+  {
+    ssr: false,
+  }
 );
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
-    return (
-        <WalletConnectionProvider>
-            <WalletModalProvider>
-                <Component {...pageProps} />
-            </WalletModalProvider>
-        </WalletConnectionProvider>
-    );
+  return (
+    <WalletConnectionProvider>
+      <WalletModalProvider>
+        <Component {...pageProps} />
+      </WalletModalProvider>
+    </WalletConnectionProvider>
+  );
 };
 
 export default App;
